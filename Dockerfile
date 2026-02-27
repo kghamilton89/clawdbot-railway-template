@@ -86,4 +86,4 @@ EXPOSE 8080
 
 # Ensure PID 1 reaps zombies and forwards signals.
 ENTRYPOINT ["tini", "--"]
-CMD ["bash", "-c", "openclaw update && node src/server.js"]
+CMD ["bash", "-c", "openclaw update & node src/server.js"]
