@@ -4,12 +4,12 @@ FROM node:22-bookworm AS openclaw-build
 # Dependencies needed for openclaw build
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    git \
-    ca-certificates \
-    curl \
-    python3 \
-    make \
-    g++ \
+  git \
+  ca-certificates \
+  curl \
+  python3 \
+  make \
+  g++ \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Bun (openclaw build uses it)
@@ -29,8 +29,8 @@ RUN git clone --depth 1 --branch "${OPENCLAW_GIT_REF}" https://github.com/opencl
 # Apply to all extension package.json files to handle workspace protocol (workspace:*).
 RUN set -eux; \
   find ./extensions -name 'package.json' -type f | while read -r f; do \
-    sed -i -E 's/"openclaw"[[:space:]]*:[[:space:]]*">=[^"]+"/"openclaw": "*"/g' "$f"; \
-    sed -i -E 's/"openclaw"[[:space:]]*:[[:space:]]*"workspace:[^"]+"/"openclaw": "*"/g' "$f"; \
+  sed -i -E 's/"openclaw"[[:space:]]*:[[:space:]]*">=[^"]+"/"openclaw": "*"/g' "$f"; \
+  sed -i -E 's/"openclaw"[[:space:]]*:[[:space:]]*"workspace:[^"]+"/"openclaw": "*"/g' "$f"; \
   done
 
 RUN pnpm install --no-frozen-lockfile
@@ -45,10 +45,10 @@ ENV NODE_ENV=production
 
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    ca-certificates \
-    tini \
-    python3 \
-    python3-venv \
+  ca-certificates \
+  tini \
+  python3 \
+  python3-venv \
   && rm -rf /var/lib/apt/lists/*
 
 # `openclaw update` expects pnpm. Provide it in the runtime image.
@@ -86,4 +86,4 @@ EXPOSE 8080
 
 # Ensure PID 1 reaps zombies and forwards signals.
 ENTRYPOINT ["tini", "--"]
-CMD ["node", "src/server.js"]
+CMD ["bash", "-c", "openclaw update && node src/server.js"]
